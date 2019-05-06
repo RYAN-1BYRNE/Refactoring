@@ -87,24 +87,36 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 	String[] fullTime = { "", "Yes", "No" };
 
 	// initialize menu bar
-	private JMenuBar menuBar() {
+	private JMenuBar createMenuBar() {
 		JMenuBar menuBar = new JMenuBar();
 		JMenu fileMenu, recordMenu, navigateMenu, closeMenu;
 
-		fileMenu = new JMenu("File");
-		fileMenu.setMnemonic(KeyEvent.VK_F);
-		recordMenu = new JMenu("Records");
-		recordMenu.setMnemonic(KeyEvent.VK_R);
-		navigateMenu = new JMenu("Navigate");
-		navigateMenu.setMnemonic(KeyEvent.VK_N);
-		closeMenu = new JMenu("Exit");
-		closeMenu.setMnemonic(KeyEvent.VK_E);
+		fileMenu = createFileMenu();
+		recordMenu = createRecordMenu();
+		navigateMenu = createNavigateMenu();
+		closeMenu = createCloseMenu();
 
 		menuBar.add(fileMenu);
 		menuBar.add(recordMenu);
 		menuBar.add(navigateMenu);
 		menuBar.add(closeMenu);
 
+		return menuBar;
+	}// end menuBar
+
+	private JMenu createCloseMenu() {
+		JMenu closeMenu = new JMenu("Exit");
+		closeMenu.setMnemonic(KeyEvent.VK_E);
+		closeMenu.add(closeApp = new JMenuItem("Close")).addActionListener(this);
+		closeApp.setMnemonic(KeyEvent.VK_F4);
+		closeApp.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, ActionEvent.CTRL_MASK));
+		return closeMenu;
+	}
+
+	// fileMenu
+	private JMenu createFileMenu() {
+		JMenu fileMenu = new JMenu("File");
+		fileMenu.setMnemonic(KeyEvent.VK_F);
 		fileMenu.add(open = new JMenuItem("Open")).addActionListener(this);
 		open.setMnemonic(KeyEvent.VK_O);
 		open.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
@@ -114,7 +126,28 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 		fileMenu.add(saveAs = new JMenuItem("Save As")).addActionListener(this);
 		saveAs.setMnemonic(KeyEvent.VK_F2);
 		saveAs.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, ActionEvent.CTRL_MASK));
+		return fileMenu;
+	}
 
+	//navigateMenu
+	private JMenu createNavigateMenu() {
+		JMenu navigateMenu = new JMenu("Navigate");
+		navigateMenu.setMnemonic(KeyEvent.VK_N);
+		navigateMenu.add(firstItem = new JMenuItem("First")).addActionListener(this);
+		navigateMenu.add(prevItem = new JMenuItem("Previous")).addActionListener(this);
+		navigateMenu.add(nextItem = new JMenuItem("Next")).addActionListener(this);
+		navigateMenu.add(lastItem = new JMenuItem("Last")).addActionListener(this);
+		navigateMenu.addSeparator();
+		navigateMenu.add(searchById = new JMenuItem("Search by ID")).addActionListener(this);
+		navigateMenu.add(searchBySurname = new JMenuItem("Search by Surname")).addActionListener(this);
+		navigateMenu.add(listAll = new JMenuItem("List all Records")).addActionListener(this);
+		return navigateMenu;
+	}
+
+	// record menu
+	private JMenu createRecordMenu() {
+		JMenu recordMenu = new JMenu("Records");
+		recordMenu.setMnemonic(KeyEvent.VK_R);
 		recordMenu.add(create = new JMenuItem("Create new Record")).addActionListener(this);
 		create.setMnemonic(KeyEvent.VK_N);
 		create.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK));
@@ -122,26 +155,8 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 		modify.setMnemonic(KeyEvent.VK_E);
 		modify.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, ActionEvent.CTRL_MASK));
 		recordMenu.add(delete = new JMenuItem("Delete Record")).addActionListener(this);
-
-		navigateMenu.add(firstItem = new JMenuItem("First"));
-		firstItem.addActionListener(this);
-		navigateMenu.add(prevItem = new JMenuItem("Previous"));
-		prevItem.addActionListener(this);
-		navigateMenu.add(nextItem = new JMenuItem("Next"));
-		nextItem.addActionListener(this);
-		navigateMenu.add(lastItem = new JMenuItem("Last"));
-		lastItem.addActionListener(this);
-		navigateMenu.addSeparator();
-		navigateMenu.add(searchById = new JMenuItem("Search by ID")).addActionListener(this);
-		navigateMenu.add(searchBySurname = new JMenuItem("Search by Surname")).addActionListener(this);
-		navigateMenu.add(listAll = new JMenuItem("List all Records")).addActionListener(this);
-
-		closeMenu.add(closeApp = new JMenuItem("Close")).addActionListener(this);
-		closeApp.setMnemonic(KeyEvent.VK_F4);
-		closeApp.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, ActionEvent.CTRL_MASK));
-
-		return menuBar;
-	}// end menuBar
+		return recordMenu;
+	}
 
 	// initialize search panel
 	private JPanel searchPanel() {
@@ -149,28 +164,31 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 
 		searchPanel.setBorder(BorderFactory.createTitledBorder("Search"));
 		searchPanel.add(new JLabel("Search by ID:"), "growx, pushx");
-		searchPanel.add(searchByIdField = new JTextField(20), "width 200:200:200, growx, pushx");
-		searchByIdField.addActionListener(this);
-		searchByIdField.setDocument(new JTextFieldLimit(20));
-		searchPanel.add(searchId = new JButton(new ImageIcon(
-				new ImageIcon("imgres.png").getImage().getScaledInstance(35, 20, java.awt.Image.SCALE_SMOOTH))),
+		searchPanel.add(searchByIdField = createTextFieldForSearch(20, 20), "width 200:200:200, growx, pushx");
+		searchPanel.add(searchId = createButtonForSearch(35, 20, "imgres.png", "Search Employee By ID"),
 				"width 35:35:35, height 20:20:20, growx, pushx, wrap");
-		searchId.addActionListener(this);
-		searchId.setToolTipText("Search Employee By ID");
 
 		searchPanel.add(new JLabel("Search by Surname:"), "growx, pushx");
-		searchPanel.add(searchBySurnameField = new JTextField(20), "width 200:200:200, growx, pushx");
-		searchBySurnameField.addActionListener(this);
-		searchBySurnameField.setDocument(new JTextFieldLimit(20));
+		searchPanel.add(searchBySurnameField = createTextFieldForSearch(20, 20), "width 200:200:200, growx, pushx");
 		searchPanel.add(
-				searchSurname = new JButton(new ImageIcon(new ImageIcon("imgres.png").getImage()
-						.getScaledInstance(35, 20, java.awt.Image.SCALE_SMOOTH))),
+				searchSurname = createButtonForSearch(35, 20, "imgres.png", "Search Employee By ID"),
 				"width 35:35:35, height 20:20:20, growx, pushx, wrap");
-		searchSurname.addActionListener(this);
-		searchSurname.setToolTipText("Search Employee By Surname");
-
 		return searchPanel;
 	}// end searchPanel
+
+	private JButton createButtonForSearch(int imageWidth, int imageHeight, String imagePath, String toolTip) {
+		JButton button = new JButton(new ImageIcon(new ImageIcon(imagePath).getImage().getScaledInstance(imageWidth, imageHeight, java.awt.Image.SCALE_SMOOTH)));
+		button.addActionListener(this);
+		button.setToolTipText(toolTip);
+		return button;
+	}
+
+	private JTextField createTextFieldForSearch(int columns, int limit) {
+		JTextField textField = new JTextField(columns);
+		textField.addActionListener(this);
+		textField.setDocument(new JTextFieldLimit(limit));
+		return textField;
+	}
 
 	// initialize navigation panel
 	private JPanel navigPanel() {
@@ -331,7 +349,7 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 			departmentCombo.setSelectedIndex(countDep);
 			salaryField.setText(format.format(thisEmployee.getSalary()));
 			// set corresponding full time combo box value to current employee
-			if (thisEmployee.getFullTime() == true)
+			if (thisEmployee.getFullTime())
 				fullTimeCombo.setSelectedIndex(1);
 			else
 				fullTimeCombo.setSelectedIndex(2);
@@ -458,7 +476,8 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 					while (firstId != currentEmployee.getEmployeeId()) {
 						// if found break from loop and display Employee details
 						// else look for next record
-						if (Integer.parseInt(searchByIdField.getText().trim()) == currentEmployee.getEmployeeId()) {
+						int id = Integer.parseInt(searchByIdField.getText().trim());
+						if (id == currentEmployee.getEmployeeId()) {
 							found = true;
 							displayRecords(currentEmployee);
 							break;
@@ -591,14 +610,14 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 		// loop until all Employees are added to vector
 		do {
 			empDetails = new Vector<Object>();
-			empDetails.addElement(new Integer(currentEmployee.getEmployeeId()));
+			empDetails.addElement(currentEmployee.getEmployeeId());
 			empDetails.addElement(currentEmployee.getPps());
 			empDetails.addElement(currentEmployee.getSurname());
 			empDetails.addElement(currentEmployee.getFirstName());
-			empDetails.addElement(new Character(currentEmployee.getGender()));
+			empDetails.addElement(currentEmployee.getGender());
 			empDetails.addElement(currentEmployee.getDepartment());
-			empDetails.addElement(new Double(currentEmployee.getSalary()));
-			empDetails.addElement(new Boolean(currentEmployee.getFullTime()));
+			empDetails.addElement(currentEmployee.getSalary());
+			empDetails.addElement(currentEmployee.getFullTime());
 
 			allEmployee.addElement(empDetails);
 			nextRecord();// look for next record
@@ -1058,7 +1077,7 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 		createRandomFile();// create random file name
 		JPanel dialog = new JPanel(new MigLayout());
 
-		setJMenuBar(menuBar());// add menu bar to frame
+		setJMenuBar(createMenuBar());// add menu bar to frame
 		// add search panel to frame
 		dialog.add(searchPanel(), "width 400:400:400, growx, pushx");
 		// add navigation panel to frame
