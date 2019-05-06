@@ -28,8 +28,8 @@ import net.miginfocom.swing.MigLayout;
 
 public class EmployeeSummaryDialog extends JDialog implements ActionListener {
 	// vector with all Employees details
-	Vector<Object> allEmployees;
-	JButton back;
+	private Vector<Object> allEmployees;
+	private JButton back;
 	
 	public EmployeeSummaryDialog(Vector<Object> allEmployees) {
 		setTitle("Employee Summary");
@@ -53,17 +53,15 @@ public class EmployeeSummaryDialog extends JDialog implements ActionListener {
 		JTable employeeTable;
 		DefaultTableModel tableModel;
 		// column center alignment
-		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-		// column left alignment 
-		DefaultTableCellRenderer leftRenderer = new DefaultTableCellRenderer();
+		DefaultTableCellRenderer centerRenderer = createTableCellRenderer(JLabel.CENTER);
+		// column left alignment
+		DefaultTableCellRenderer leftRenderer = createTableCellRenderer(JLabel.LEFT);
 		Vector<String> header = new Vector<String>();
 		// header names
 		String[] headerName = { "ID", "PPS Number", "Surname", "First Name", "Gender", "Department", "Salary",
 				"Full Time" };
 		// column widths
 		int[] colWidth = { 15, 100, 120, 120, 50, 120, 80, 80 };
-		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-		leftRenderer.setHorizontalAlignment(JLabel.LEFT);
 		// add headers
 		for (int i = 0; i < headerName.length; i++) {
 			header.addElement(headerName[i]);
@@ -111,6 +109,12 @@ public class EmployeeSummaryDialog extends JDialog implements ActionListener {
 		
 		return summaryDialog;
 	}// end summaryPane
+
+	private DefaultTableCellRenderer createTableCellRenderer(int align) {
+		DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+		renderer.setHorizontalAlignment(align);
+		return renderer;
+	}
 
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == back){
