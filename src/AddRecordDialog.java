@@ -48,37 +48,9 @@ public class AddRecordDialog extends JDialog implements ActionListener {
 	// initialize dialog container
 	public Container dialogPane() {
 		JPanel empDetails, buttonPanel;
-		empDetails = new JPanel(new MigLayout());
+		empDetails = createEmpDetailsPanel();
 		buttonPanel = new JPanel();
 		JTextField field;
-
-		empDetails.setBorder(BorderFactory.createTitledBorder("Employee Details"));
-
-		empDetails.add(new JLabel("ID:"), "growx, pushx");
-		empDetails.add(idField = new JTextField(20), "growx, pushx, wrap");
-		idField.setEditable(false);
-		
-
-		empDetails.add(new JLabel("PPS Number:"), "growx, pushx");
-		empDetails.add(ppsField = new JTextField(20), "growx, pushx, wrap");
-
-		empDetails.add(new JLabel("Surname:"), "growx, pushx");
-		empDetails.add(surnameField = new JTextField(20), "growx, pushx, wrap");
-
-		empDetails.add(new JLabel("First Name:"), "growx, pushx");
-		empDetails.add(firstNameField = new JTextField(20), "growx, pushx, wrap");
-
-		empDetails.add(new JLabel("Gender:"), "growx, pushx");
-		empDetails.add(genderCombo = new JComboBox<String>(this.parent.gender), "growx, pushx, wrap");
-
-		empDetails.add(new JLabel("Department:"), "growx, pushx");
-		empDetails.add(departmentCombo = new JComboBox<String>(this.parent.department), "growx, pushx, wrap");
-
-		empDetails.add(new JLabel("Salary:"), "growx, pushx");
-		empDetails.add(salaryField = new JTextField(20), "growx, pushx, wrap");
-
-		empDetails.add(new JLabel("Full Time:"), "growx, pushx");
-		empDetails.add(fullTimeCombo = new JComboBox<String>(this.parent.fullTime), "growx, pushx, wrap");
 
 		buttonPanel.add(save = new JButton("Save"));
 		save.addActionListener(this);
@@ -102,6 +74,38 @@ public class AddRecordDialog extends JDialog implements ActionListener {
 			}// end else if
 		}// end for
 		idField.setText(Integer.toString(this.parent.getNextFreeId()));
+		return empDetails;
+	}
+
+	private JPanel createEmpDetailsPanel() {
+		JPanel empDetails = new JPanel(new MigLayout());
+		empDetails.setBorder(BorderFactory.createTitledBorder("Employee Details"));
+
+		empDetails.add(new JLabel("ID:"), "growx, pushx");
+		empDetails.add(idField = new JTextField(20), "growx, pushx, wrap");
+		idField.setEditable(false);
+
+
+		empDetails.add(new JLabel("PPS Number:"), "growx, pushx");
+		empDetails.add(ppsField = new JTextField(20), "growx, pushx, wrap");
+
+		empDetails.add(new JLabel("Surname:"), "growx, pushx");
+		empDetails.add(surnameField = new JTextField(20), "growx, pushx, wrap");
+
+		empDetails.add(new JLabel("First Name:"), "growx, pushx");
+		empDetails.add(firstNameField = new JTextField(20), "growx, pushx, wrap");
+
+		empDetails.add(new JLabel("Gender:"), "growx, pushx");
+		empDetails.add(genderCombo = new JComboBox<String>(this.parent.gender), "growx, pushx, wrap");
+
+		empDetails.add(new JLabel("Department:"), "growx, pushx");
+		empDetails.add(departmentCombo = new JComboBox<String>(this.parent.department), "growx, pushx, wrap");
+
+		empDetails.add(new JLabel("Salary:"), "growx, pushx");
+		empDetails.add(salaryField = new JTextField(20), "growx, pushx, wrap");
+
+		empDetails.add(new JLabel("Full Time:"), "growx, pushx");
+		empDetails.add(fullTimeCombo = new JComboBox<String>(this.parent.fullTime), "growx, pushx, wrap");
 		return empDetails;
 	}
 
