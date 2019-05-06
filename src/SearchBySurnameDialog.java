@@ -20,9 +20,9 @@ import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 
 public class SearchBySurnameDialog extends JDialog implements ActionListener{
-	EmployeeDetails parent;
-	JButton search, cancel;
-	JTextField searchField;
+	private EmployeeDetails parent;
+	private JButton search, cancel;
+	private JTextField searchField;
 	// constructor for search by surname dialog
 	public SearchBySurnameDialog(EmployeeDetails parent) {
 		setTitle("Search by Surname");
@@ -71,15 +71,6 @@ public class SearchBySurnameDialog extends JDialog implements ActionListener{
 
 	// action listener for save and cancel button
 	public void actionPerformed(ActionEvent e) {
-		// if option search, search for Employee
-		if(e.getSource() == search){
-			this.parent.searchBySurnameField.setText(searchField.getText());
-			// search Employee by surname
-			this.parent.searchEmployeeBySurname();
-			dispose();// dispose dialog
-		}// end if
-		// else dispose dialog
-		else if(e.getSource() == cancel)
-			dispose();// dispose dialog
+		SearchByDialog.actionPerformed(e, search, searchField, cancel, this.parent);
 	}// end actionPerformed
 }// end class SearchBySurnameDialog
